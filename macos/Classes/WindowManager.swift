@@ -495,7 +495,11 @@ public class WindowManager: NSObject, NSWindowDelegate {
     }
     
     // NSWindowDelegate
-    
+
+    public func window(_ window: NSWindow, willUseFullScreenPresentationOptions proposedOptions: NSApplication.PresentationOptions = []) -> NSApplication.PresentationOptions {
+        return [.autoHideToolbar, .autoHideMenuBar, .fullScreen]
+    }
+
     public func windowShouldClose(_ sender: NSWindow) -> Bool {
         _emitEvent("close")
         if (isPreventClose()) {
@@ -543,12 +547,14 @@ public class WindowManager: NSObject, NSWindowDelegate {
     public func windowDidDeminiaturize(_ notification: Notification) {
         _emitEvent("restore");
     }
-    
-    public func windowDidEnterFullScreen(_ notification: Notification){
+
+    public func windowDidEnterFullScreen(_ notification: Notification) {
+        mainWindow.toolbar?.isVisible = false
         _emitEvent("enter-full-screen");
     }
-    
-    public func windowDidExitFullScreen(_ notification: Notification){
+
+    public func windowDidExitFullScreen(_ notification: Notification) {
+        mainWindow.toolbar?.isVisible = true
         _emitEvent("leave-full-screen");
     }
     
